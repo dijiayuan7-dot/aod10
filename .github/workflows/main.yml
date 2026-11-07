@@ -1,0 +1,40 @@
+name: Build LSPosed module
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build local Xposed API stubs
+        run: |
+          mkdir -p app/libs /tmp/xposed-classes
+          javac -d /tmp/xposed-classes $(find xposed_stub -name '*.java')
+          jar cf app/libs/api.jar -C /tmp/xposed-classes .
+          test -s app/libs/api.jar
+          ls -l app/libs/api.jar
+
+      - name: Build APK
+        run: gradle --no-daemon assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: aod-suspend-test
+          path: app/build/outputs/apk/debug/app-debug.apk
