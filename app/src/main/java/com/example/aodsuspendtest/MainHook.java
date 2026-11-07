@@ -1,11 +1,10 @@
-package com.example.aodsuspendtest;
-
 import android.os.Handler;
 import android.os.Looper;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.WeakHashMap;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_LoadPackage.LoadPackageParam;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
